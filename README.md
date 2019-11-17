@@ -1,4 +1,4 @@
-#   scrapy+scrapy_redis实现jd图书信息增量式爬虫
+#   scrapy+scrapy_redis实现jd、亚马逊、当当网图书信息增量式爬虫
 ## 特殊说明
 - 自带断点续爬。
 - redis仅充当中间件作用。
