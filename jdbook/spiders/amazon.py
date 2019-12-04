@@ -14,7 +14,6 @@ class AmazonSpider(RedisCrawlSpider):
 
     rules = (
         Rule(LinkExtractor(restrict_xpaths=("//div[@class='categoryRefinementsSection']/ul/li",)), follow=True),
-        # 写到li标签即可，不需要写到li标签下的a标签的
         Rule(LinkExtractor(restrict_xpaths=("//div[@id='mainResults']/ul/li//h2/..",)), callback="parse_book_detail"),
         Rule(LinkExtractor(restrict_xpaths=("//div[@id='pagn']",)), follow=True),
 
