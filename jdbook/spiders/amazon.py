@@ -5,6 +5,7 @@ from scrapy.spiders import CrawlSpider, Rule
 from scrapy_redis.spiders import RedisCrawlSpider
 import re
 
+
 class AmazonSpider(RedisCrawlSpider):
     name = 'amazon'
     allowed_domains = ['amazon.cn']
@@ -12,16 +13,14 @@ class AmazonSpider(RedisCrawlSpider):
     redis_key = "amazon"
 
     rules = (
-        #匹配大分类的url地址和小分类的url（小分类和大分类是一样找到的，所以要follow=True）
-        Rule(LinkExtractor(restrict_xpaths=("//div[@class='categoryRefinementsSection']/ul/li",)), follow=True),  # 写到li标签即可，不需要写到li标签下的a标签的
-        #匹配图书的url地址
-        Rule(LinkExtractor(restrict_xpaths=("//div[@id='mainResults']/ul/li//h2/..",)),callback="parse_book_detail"),
-        #列表页翻页
-        Rule(LinkExtractor(restrict_xpaths=("//div[@id='pagn']",)),follow=True),
+        Rule(LinkExtractor(restrict_xpaths=("//div[@class='categoryRefinementsSection']/ul/li",)), follow=True),
+        # 写到li标签即可，不需要写到li标签下的a标签的
+        Rule(LinkExtractor(restrict_xpaths=("//div[@id='mainResults']/ul/li//h2/..",)), callback="parse_book_detail"),
+        Rule(LinkExtractor(restrict_xpaths=("//div[@id='pagn']",)), follow=True),
 
     )
 
-    def parse_book_detail(self,response):
+    def parse_book_detail(self, response):
         # with open(response.url.split("/")[-1]+".html","w",encoding="utf-8") as f:
         #     f.write(response.body.decode())
         item = {}
@@ -30,7 +29,8 @@ class AmazonSpider(RedisCrawlSpider):
         item["book_author"] = response.xpath("//div[@id='byline']/span/a/text()").extract()
         # item["book_img"] = response.xpath("//div[@id='img-canvas']/img/@src").extract_first()
         item["book_price"] = response.xpath("//div[@id='soldByThirdParty']/span[2]/text()").extract_first()
-        item["book_cate"] = response.xpath("//div[@id='wayfinding-breadcrumbs_feature_div']/ul/li[not(@class)]/span/a/text()").extract()
+        item["book_cate"] = response.xpath(
+            "//div[@id='wayfinding-breadcrumbs_feature_div']/ul/li[not(@class)]/span/a/text()").extract()
         item["book_cate"] = [i.strip() for i in item["book_cate"]]
         item["book_url"] = response.url
         item["book_press"] = response.xpath("//b[text()='出版社:']/../text()").extract_first()

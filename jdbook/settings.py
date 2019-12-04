@@ -16,22 +16,14 @@ NEWSPIDER_MODULE = 'jdbook.spiders'
 
 
 
-# 去重类
-# 参考理解：
-# 1，一个url应该标记唯一的一个资源(所以标记同一个资源的两个url视为一个指纹（去参数）)，而不是标记这是一个唯一的url（http://www.example.com/query?id=111&cat=222  http://www.example.com/query?cat=222&id=111）
-# 2，在计算指纹的时候（我们希望同一个指纹对应的url地址是唯一的），所以请求头默认是被忽视的（ 没有带上cookie）（因为可能是两个用户访问同一个地址，session_id不同，所以cookie是不同的）。
-# 3，hashlib.sha1()
+
 DUPEFILTER_CLASS = "scrapy_redis.dupefilter.RFPDupeFilter"
 
-# 调度器类（存的是待爬取的request对象，和已经爬取的request对象的指纹）
 SCHEDULER = "scrapy_redis.scheduler.Scheduler"
 
-# 调度器的存内容是否要持久化（调度器关闭的时候会调用close()方法，判断之后决定是否要清空df（指纹）和queue（待爬取的对象））
 SCHEDULER_PERSIST = True
 
-# 把数据保存在redis上的配置
 REDIS_URL = "redis://127.0.0.1:6379"
-# 第二种配置redis的方式
 # REDIS_HOST="127.0.0.1:6379"
 # REDIS_POST=6379
 
