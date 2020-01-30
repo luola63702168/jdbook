@@ -16,7 +16,6 @@ NEWSPIDER_MODULE = 'jdbook.spiders'
 
 
 
-
 DUPEFILTER_CLASS = "scrapy_redis.dupefilter.RFPDupeFilter"
 
 SCHEDULER = "scrapy_redis.scheduler.Scheduler"
